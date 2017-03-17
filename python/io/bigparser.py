@@ -117,23 +117,23 @@ def match_columns(ifname, optfname='options'):
     
     options = load_options(optfname)
 
-    curlist = []
     origlist = []
+    i = 0
     with open(ifname) as infile:
-        for i, line in enumerate(infile):
-            if(len(curlist) != 0):
-                if(len(origlist) == 0):
-                    origlist = np.asarray(curlist) # first time initialization
-                else:
-                    origlist = np.intersect1d(origlist, np.asarray(curlist))
-            
+        for line in infile:
+            i = i + 1            
             if(i>14):
                 # Just parse the header
                 break
             elif(i>3):
                 optval = find_optval(i)
                 curlist = match_cur_field(options, optval, line)
-                
+                if(len(curlist) != 0):
+                    if(len(origlist) == 0):
+                        origlist = np.asarray(curlist) # first time initialization
+                    else:
+                        origlist = np.intersect1d(origlist, np.asarray(curlist))
+          
     return origlist
                 
 if __name__=="__main__":
