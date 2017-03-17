@@ -34,9 +34,10 @@ def load_options(filename):
         # Initialize options to empty. Although not necessary, it helps in other function to directly check
         # if the value is of an option is empty, then, just assume all related values to be selected.
         options['id'] = ''; options['CL_Name'] = ''; options['det_plate'] = '';
-        options['det_well'] = ''; options['SM_Dose'] = ''; options['SM_LINCS_ID'] = '';
-        options['SM_Name'] = ''; options['SM_Center_Compound_ID'] = ''; options['SM_Time'] = '';
-        options['SM_Pert_Type'] = '';
+        options['det_well'] = ''; options['SM_Dose'] = ''; options['SM_Dose_Unit'] = ''; 
+        options['SM_LINCS_ID'] = ''; options['SM_Name'] = ''; options['SM_Center_Compound_ID'] = ''; 
+        options['SM_Time'] = ''; options['SM_Time_Unit'] = ''; options['SM_Pert_Type'] = '';
+        
         for l in lines:
                 l = l.split('=')
                 options[l[0]] = l[1]
@@ -45,8 +46,6 @@ def load_options(filename):
     
 def match_cur_field(options, optval, line):
     curlist = []
-    print options, optval
-    print options[optval]
     if(options[optval] != ''):
         vals = line.split('\t') #.gct is a tab delimited file
         for j in range(len(vals)):
@@ -66,6 +65,8 @@ def find_optval(i):
         optval = 'det_well'
     elif(i==7):
         optval = 'SM_Dose'
+    elif(i==8):
+        optval = 'SM_Dose_Unit'
     elif(i==9):
         optval = 'SM_LINCS_ID'
     elif(i==10):
@@ -74,6 +75,8 @@ def find_optval(i):
         optval = 'SM_Center_Compound_ID'
     elif(i==12):
         optval ='SM_Time'
+    elif(i==13):
+        optval = 'SM_Time_Unit'
     elif(i==14):
         optval = 'SM_Pert_Type'
     return optval
@@ -127,7 +130,7 @@ def match_columns(ifname, optfname='options'):
             if(i>14):
                 # Just parse the header
                 break
-            else:
+            elif(i>3):
                 optval = find_optval(i)
                 curlist = match_cur_field(options, optval, line)
                 
@@ -135,9 +138,10 @@ def match_columns(ifname, optfname='options'):
                 
 if __name__=="__main__":
 
-    ifname = "/home/soufanom/Postdoc/Projects/L1000/Data/GSE70138_Broad_LINCS_Level3_INF_mlr12k_n78980x22268_2015-06-30.gct"#sys.argv[0]
+    #ifname = "/home/soufanom/Postdoc/Projects/L1000/Data/GSE70138_Broad_LINCS_Level3_INF_mlr12k_n78980x22268_2015-06-30.gct"#sys.argv[0]
+    ifname = "GSE70138_Broad_LINCS_Level2_GEX_n78980x978_2015-06-30.gct"
     origlist = match_columns(ifname, optfname='options_example')
-    print origlist
+    print origlist, len(origlist)
 
 
 
