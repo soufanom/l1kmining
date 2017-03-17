@@ -45,6 +45,7 @@ def load_options(filename):
     
 def match_cur_field(options, optval, line):
     curlist = []
+    print options
     if(options[optval] != ''):
         vals = line.split('\t') #.gct is a tab delimited file
         for j in range(len(vals)):
